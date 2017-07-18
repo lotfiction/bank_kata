@@ -2,7 +2,9 @@ package me.kata.bank.service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import me.kata.bank.model.Account;
 import me.kata.bank.model.Statement;
@@ -76,9 +78,55 @@ public class AccountServices {
 	 * @param account
 	 */
 	public void printStatements(Account account) {
+		printStatements(account.getStatements());
+	}
+	
+	/**
+	 * Print only the deposit statements of an account.
+	 * 
+	 * @param account
+	 */
+	public void printDepositStatements(Account account) {
+		List<Statement> depositOps = account.getStatements().stream() 	// convert list to stream
+                .filter(statement -> statement.getAmount() >= 0)		// filter
+                .collect(Collectors.toList());              			// collect the output and convert streams to a List
+		
+		Printable title = () -> System.out.println("List of deposit operations :");
+		title.print();
+		
+		printStatements(depositOps);
+	}
+	
+	/**
+	 * Print only the withdrawal statements of an account.
+	 * 
+	 * @param account
+	 */
+	public void printWithdrawalStatements(Account account) {
+		List<Statement> depositOps = account.getStatements().stream() 	// convert list to stream
+				.filter(statement -> statement.getAmount() < 0)			// filter
+				.collect(Collectors.toList());              			// collect the output and convert streams to a List
+		
+		Printable title = () -> System.out.println("List of withdrawal operations :");
+		title.print();
+		
+		printStatements(depositOps);
+		
+	}
+	
+	/**
+	 * Print a list of statements.
+	 * 
+	 * @param statements
+	 */
+	private void printStatements(List<Statement> statements) {
+		if(statements.isEmpty()) {
+			System.out.println("No operations found.");
+			return;
+		}
 		Printable header = () -> System.out.println("Date		Operation	Amount		New balance	");
 		header.print();
-		for(Statement statement : account.getStatements()) {
+		for(Statement statement : statements) {
 			statement.print();
 		}
 	}

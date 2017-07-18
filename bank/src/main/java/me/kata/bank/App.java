@@ -14,6 +14,8 @@ public class App {
 		
 		Account account = accountServices.createAccount();
 		
+		accountServices.printStatements(account);
+		
 		accountServices.deposit(1000, account);
 		accountServices.deposit(2000, account);
 		accountServices.withdrawal(250, account);
@@ -21,5 +23,8 @@ public class App {
 		accountServices.withdrawal(800, account);
 		
 		accountServices.printStatements(account);
+		accountServices.printDepositStatements(account);
+		accountServices.printWithdrawalStatements(account);
+		
 	}
 }
